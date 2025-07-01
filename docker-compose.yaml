@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  django_db:
+    container_name: django_db
+    image: mysql:8.4.2
+    volumes:
+      - ./data:/var/lib/mysql
+    env_file:
+      - .env
+    ports:
+      - "8002:3306"
+    networks:
+      - django
+
+  django_web:
+    container_name: django_web
+    build: .
+    volumes:
+      - ./django_project:/app
+      - ./certs:/app/certs
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - django_db
+    networks:
+      - django
+
+  django_phpmyadmin:
+    container_name: django_phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8001:80"
+    environment:
+      PMA_HOST: django_db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      - django_db
+    networks:
+      - django
+
+networks:
+  django:
+    driver: bridge

@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.sqlite3
+.env
+.DS_Store
+Thumbs.db
+.git/
+.gitignore
+*.log
+venv/
+env/
+.vscode/
+.idea/
+django_project/media/
+django_project/staticfiles/
+certs/
